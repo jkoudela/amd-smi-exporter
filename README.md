@@ -1,6 +1,23 @@
 # AMD SMI Exporter
 
-A Prometheus exporter for AMD GPU metrics using the `amd-smi` tool.
+A Prometheus exporter for AMD GPU metrics using the `amd-smi` tool. The goal was to get some AMD GPU visualization to Grafana.
+
+## Grafana Dashboard
+
+![Dashboard](image.png)
+
+The included Grafana dashboard (`grafana/amd_gpu_dashboard.json`) provides comprehensive monitoring of your AMD GPUs with the following features:
+
+- Real-time GPU metrics
+- Dark theme optimized visualization
+- Multiple panels tracking various GPU metrics
+- Tagged with 'gpu' and 'amd' for easy discovery
+- Prometheus data source integration
+
+To use the dashboard:
+1. Import the JSON file from `grafana/amd_gpu_dashboard.json` into your Grafana instance
+2. Ensure your Prometheus data source is configured and named 'prometheus'
+3. The dashboard will automatically start displaying metrics from your AMD GPUs
 
 ## Prerequisites
 
