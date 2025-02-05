@@ -246,12 +246,38 @@ func (c *AMDSMICollector) collectGPUMetrics(gpuID string, gpu map[string]interfa
 	}
 
 	// Memory usage metrics
-	if memory, ok := gpu["memory"].(map[string]interface{}); ok {
-		if total, ok := getNestedValue(memory, "total", "value"); ok {
-			c.gpuMemoryUsage.WithLabelValues(gpuID, "total").Set(total)
+	if memUsage, ok := gpu["mem_usage"].(map[string]interface{}); ok {
+		// VRAM metrics
+		if value, ok := getNestedValue(memUsage, "total_vram", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "total_vram").Set(value * 1024 * 1024)
 		}
-		if used, ok := getNestedValue(memory, "used", "value"); ok {
-			c.gpuMemoryUsage.WithLabelValues(gpuID, "used").Set(used)
+		if value, ok := getNestedValue(memUsage, "used_vram", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "used_vram").Set(value * 1024 * 1024)
+		}
+		if value, ok := getNestedValue(memUsage, "free_vram", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "free_vram").Set(value * 1024 * 1024)
+		}
+
+		// Visible VRAM metrics
+		if value, ok := getNestedValue(memUsage, "total_visible_vram", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "total_visible_vram").Set(value * 1024 * 1024)
+		}
+		if value, ok := getNestedValue(memUsage, "used_visible_vram", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "used_visible_vram").Set(value * 1024 * 1024)
+		}
+		if value, ok := getNestedValue(memUsage, "free_visible_vram", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "free_visible_vram").Set(value * 1024 * 1024)
+		}
+
+		// GTT metrics
+		if value, ok := getNestedValue(memUsage, "total_gtt", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "total_gtt").Set(value * 1024 * 1024)
+		}
+		if value, ok := getNestedValue(memUsage, "used_gtt", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "used_gtt").Set(value * 1024 * 1024)
+		}
+		if value, ok := getNestedValue(memUsage, "free_gtt", "value"); ok {
+			c.gpuMemoryUsage.WithLabelValues(gpuID, "free_gtt").Set(value * 1024 * 1024)
 		}
 	}
 
