@@ -1,0 +1,21 @@
+[Unit]
+Description=AMD SMI Exporter
+Documentation=https://github.com/jankoudela/amd-smi-exporter
+After=network-online.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/amd-smi-exporter
+Restart=always
+RestartSec=10
+
+# Security enhancements
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/proc /sys
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
