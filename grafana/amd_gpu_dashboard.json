@@ -232,7 +232,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total Power Consumed (kWh)",
+      "title": "Total Power Consumed",
       "type": "stat",
       "fieldConfig": {
         "defaults": {
@@ -253,7 +253,7 @@
               },
               {
                 "color": "red",
-                "value": 0.1
+                "value": 1
               }
             ]
           },
