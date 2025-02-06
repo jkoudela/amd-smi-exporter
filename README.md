@@ -26,6 +26,44 @@ To use the dashboard:
 
 ## Installation
 
+### Option 1: Quick Install (Recommended)
+
+Install the latest release with a single command:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/jkoudela/amd-smi-exporter/main/get.sh | sudo bash
+```
+
+This will automatically:
+- Download the latest release
+- Install the binary and service
+- Start and enable the service
+- Show the service status and available endpoints
+
+### Option 2: Manual Install
+
+If you prefer to inspect the files before installation:
+
+```bash
+# Download installation files
+curl -L -O "https://github.com/jkoudela/amd-smi-exporter/releases/latest/download/amd-smi-exporter"
+curl -L -O "https://github.com/jkoudela/amd-smi-exporter/releases/latest/download/amd-smi-exporter.service"
+curl -L -O "https://github.com/jkoudela/amd-smi-exporter/releases/latest/download/install_local.sh"
+
+# Make scripts executable
+chmod +x amd-smi-exporter install_local.sh
+
+# Install binary and service (requires sudo)
+sudo ./install_local.sh
+```
+
+Verify the service is running:
+```bash
+systemctl status amd-smi-exporter
+```
+
+### Option 3: Build from Source
+
 Clone the repository and build the binary:
 
 ```bash
@@ -37,7 +75,7 @@ make build
 Alternatively, you can use the provided install script to deploy to a remote Linux host with IP and username using ssh:
 
 ```bash
-./install.sh <target-host> root
+./install_remote.sh <target-host> root
 ```
 
 ## Building
