@@ -66,13 +66,33 @@ make clean
 The exporter provides the following metrics:
 
 - `amd_gpu_usage_percent`: GPU usage metrics in percent
+  - Graphics engine usage (gfx)
+  - Memory controller usage (umc)
+  - Multimedia engine usage (mm)
+  - Video codec engine usage (vcn)
 - `amd_gpu_power_watts`: GPU power consumption in watts
+  - Socket power consumption
 - `amd_gpu_temperature_celsius`: GPU temperature in celsius
+  - Edge temperature
+  - Hotspot temperature
+  - Memory temperature
 - `amd_gpu_clock_mhz`: GPU clock speeds in MHz
+  - Graphics engine clock (gfx)
 - `amd_gpu_memory_bytes`: GPU memory usage in bytes
-- `amd_gpu_fan`: GPU fan metrics (speed and RPM)
+  - Reports VRAM (total, free, used)
+  - Reports visible VRAM (total, free, used)
+  - Reports GTT memory (total, free, used)
+- `amd_gpu_fan`: GPU fan metrics
+  - Speed percentage
+  - RPM
+  - Usage percentage
 - `amd_gpu_voltage_mv`: GPU voltage in millivolts
+  - Graphics engine voltage (gfx)
+  - Memory voltage
+  - SOC voltage
 - `amd_gpu_ecc_errors_total`: GPU ECC error counts
+  - Correctable errors
+  - Uncorrectable errors
 
 Each metric includes appropriate labels to identify the GPU and metric type.
 
