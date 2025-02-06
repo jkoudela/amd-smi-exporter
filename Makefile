@@ -1,4 +1,4 @@
-.PHONY: build clean
+.PHONY: build clean update-dashboard update-metrics
 
 # Binary name
 BINARY_NAME=amd-smi-exporter
@@ -10,3 +10,10 @@ build:
 # Clean build artifacts
 clean:
 	rm -f $(BINARY_NAME)
+
+# Update Grafana dashboard
+update-dashboard:
+	./scripts/update-dashboard.sh
+
+update-metrics:
+	./scripts/update-metrics.sh
