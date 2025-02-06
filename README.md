@@ -26,24 +26,29 @@ To use the dashboard:
 
 ## Installation
 
+Clone the repository and build the binary:
+
 ```bash
-go get github.com/jankoudela/amd-smi-exporter
+git clone https://github.com/jkoudela/amd-smi-exporter.git
+cd amd-smi-exporter
+make build
+```
+
+Alternatively, you can use the provided install script to deploy to a remote Linux host with IP and username using ssh:
+
+```bash
+./install.sh <target-host> root
 ```
 
 ## Building
 
-The project includes a Makefile with several build targets:
-
-### Build for local architecture (macOS)
-```bash
-make build
-```
+The project includes a Makefile with the following targets:
 
 ### Build for Linux (amd64)
 ```bash
-make build-linux
+make build
 ```
-This will create a binary named `amd-smi-exporter-linux-amd64` that you can deploy to your Linux machine.
+This will create a Linux binary named `amd-smi-exporter` that you can deploy to your Linux machine.
 
 ### Clean build artifacts
 ```bash
