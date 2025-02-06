@@ -4,11 +4,10 @@ A Prometheus exporter for AMD GPU metrics using the `amd-smi` tool. The goal was
 
 ## Grafana Dashboards
 
-![Dashboard](image.png)
-
 The project includes two Grafana dashboards:
 
 ### Main Dashboard (`grafana/amd_gpu_dashboard.json`)
+![Dashboard](dashboard.png)
 
 A monitoring dashboard for AMD GPUs with the following features:
 
@@ -19,7 +18,7 @@ A monitoring dashboard for AMD GPUs with the following features:
 - Prometheus data source integration
 
 ### Metrics Dashboard (`grafana/amd_gpu_metrics.json`)
-
+![Metrics](metrics.png)
 A detailed metrics-focused dashboard that provides:
 - Detailed fan metrics (RPM, Speed, Usage)
 - Power consumption metrics in a dedicated row

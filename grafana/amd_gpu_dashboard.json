@@ -128,13 +128,39 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        }
+      },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "amd_gpu_temp_celsius{type=\"edge\"}",
+          "expr": "amd_gpu_temperature_celsius{type=\"edge\"}",
           "refId": "A"
         }
       ],
@@ -247,6 +273,10 @@
       "type": "row",
       "title": "Temperature Details",
       "panels": [{
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
         "gridPos": {
           "h": 8,
           "w": 24,
@@ -254,6 +284,64 @@
           "y": 5
         },
         "id": 6,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "decimals": 1,
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "smooth",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 60
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": []
+        },
         "options": {
           "legend": {
             "calcs": [],
@@ -272,7 +360,9 @@
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "expr": "amd_gpu_temp_celsius",
+            "exemplar": true,
+            "expr": "amd_gpu_temperature_celsius{type=~\"edge|hotspot|memory\"}",
+            "interval": "",
             "legendFormat": "{{type}}",
             "refId": "A"
           }
@@ -352,7 +442,7 @@
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "expr": "amd_gpu_memory_bytes{type=~\"gtt\"} / 1024 / 1024 / 1024",
+            "expr": "amd_gpu_memory_bytes{type=~\"used_gtt|free_gtt|total_gtt\"} / 1024 / 1024 / 1024",
             "legendFormat": "{{type}}",
             "refId": "A"
           }
@@ -641,7 +731,7 @@
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "expr": "amd_gpu_ecc_errors_count",
+            "expr": "amd_gpu_ecc_errors_total",
             "legendFormat": "{{type}}",
             "refId": "A"
           }
