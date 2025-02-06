@@ -2,11 +2,14 @@
 
 A Prometheus exporter for AMD GPU metrics using the `amd-smi` tool. The goal was to get some AMD GPU visualization to Grafana.
 
-## Grafana Dashboard
+## Grafana Dashboards
 
-![Dashboard](image.png)
+The project includes two Grafana dashboards:
 
-The included Grafana dashboard (`grafana/amd_gpu_dashboard.json`) provides comprehensive monitoring of your AMD GPUs with the following features:
+### Main Dashboard (`grafana/amd_gpu_dashboard.json`)
+![Dashboard](dashboard.png)
+
+A monitoring dashboard for AMD GPUs with the following features:
 
 - Real-time GPU metrics
 - Dark theme optimized visualization
@@ -14,10 +17,28 @@ The included Grafana dashboard (`grafana/amd_gpu_dashboard.json`) provides compr
 - Tagged with 'gpu' and 'amd' for easy discovery
 - Prometheus data source integration
 
-To use the dashboard:
-1. Import the JSON file from `grafana/amd_gpu_dashboard.json` into your Grafana instance
-2. Ensure your Prometheus data source is configured and named 'prometheus'
-3. The dashboard will automatically start displaying metrics from your AMD GPUs
+### Metrics Dashboard (`grafana/amd_gpu_metrics.json`)
+![Metrics](metrics.png)
+A detailed metrics-focused dashboard that provides:
+- Detailed fan metrics (RPM, Speed, Usage)
+- Power consumption metrics in a dedicated row
+- Advanced performance metrics
+
+### Dashboard Setup
+
+1. Copy `.env.example` to `.env` and configure your Grafana settings:
+   ```bash
+   GRAFANA_URL=http://your-grafana-url:3000
+   GRAFANA_API_KEY=your-api-key
+   ```
+
+2. Use the provided Makefile targets to update the dashboards:
+   ```bash
+   make update-dashboard  # Updates the main dashboard
+   make update-metrics    # Updates the metrics dashboard
+   ```
+   
+Both dashboards will automatically start displaying metrics from your AMD GPUs once they're imported into Grafana.
 
 ## Prerequisites
 
@@ -86,12 +107,20 @@ The project includes a Makefile with the following targets:
 ```bash
 make build
 ```
-This will create a Linux binary named `amd-smi-exporter` that you can deploy to your Linux machine.
+Creates a Linux binary named `amd-smi-exporter` that you can deploy to your Linux machine.
 
 ### Clean build artifacts
 ```bash
 make clean
 ```
+Removes build artifacts and temporary files.
+
+### Update Grafana Dashboards
+```bash
+make update-dashboard  # Updates the main dashboard
+make update-metrics    # Updates the metrics dashboard
+```
+Updates the respective Grafana dashboards using the configuration from your `.env` file.
 
 ## Usage
 
