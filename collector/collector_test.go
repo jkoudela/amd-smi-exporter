@@ -1,7 +1,7 @@
 package collector
 
 import (
-	"encoding/json"
+	"os"
 	"strings"
 	"testing"
 
@@ -17,75 +17,20 @@ func TestAMDSMICollectorWithSampleData(t *testing.T) {
 
 
 
-	// Convert sample data to JSON format
-	gpuData := []interface{}{
-		map[string]interface{}{
-			"gpu": float64(0),
-			"usage": map[string]interface{}{
-				"gfx_activity": map[string]interface{}{
-					"value": float64(0),
-				},
-				"umc_activity": map[string]interface{}{
-					"value": float64(2),
-				},
-				"mm_activity": map[string]interface{}{
-					"value": float64(98),
-				},
-			},
-			"power": map[string]interface{}{
-				"socket_power": map[string]interface{}{
-					"value": float64(41),
-				},
-				"gfx_voltage": map[string]interface{}{
-					"value": float64(719),
-				},
-			},
-			"temperature": map[string]interface{}{
-				"edge": map[string]interface{}{
-					"value": float64(42),
-				},
-				"hotspot": map[string]interface{}{
-					"value": float64(49),
-				},
-			},
-			"clock": map[string]interface{}{
-				"gfx_0": map[string]interface{}{
-					"clk": map[string]interface{}{
-						"value": float64(252),
-					},
-				},
-			},
-			"memory": map[string]interface{}{
-				"used": map[string]interface{}{
-					"value": float64(1758 * 1024 * 1024), // Convert MB to bytes
-				},
-				"total": map[string]interface{}{
-					"value": float64(46064 * 1024 * 1024), // Convert MB to bytes
-				},
-			},
-			"fan": map[string]interface{}{
-				"speed": map[string]interface{}{
-					"value": float64(51),
-				},
-				"rpm": map[string]interface{}{
-					"value": float64(977),
-				},
-			},
-		},
-	}
 
-	// Mock the osExecute function to return JSON data
+
+	// Mock the osExecute function to return sample file data
 	osExecute = func(command string) ([]byte, error) {
-		// The real command would return JSON, so we need to marshal our data
-		jsonData, err := json.Marshal(gpuData)
+		// Read the sample file
+		sampleData, err := os.ReadFile("../amd-smi-output.sample")
 		if err != nil {
 			return nil, err
 		}
 		
 		// Print the JSON for debugging
-		t.Logf("Generated JSON: %s", string(jsonData))
+		t.Logf("Sample JSON: %s", string(sampleData))
 		
-		return jsonData, nil
+		return sampleData, nil
 	}
 
 	// Set log level to debug for testing
@@ -100,28 +45,48 @@ func TestAMDSMICollectorWithSampleData(t *testing.T) {
 
 	// Trigger collection
 	if err := testutil.CollectAndCompare(collector, strings.NewReader(`
+# HELP amd_gpu_clock_mhz GPU clock metrics in MHz
+# TYPE amd_gpu_clock_mhz gauge
+amd_gpu_clock_mhz{gpu="0",type="gfx"} 60
+# HELP amd_gpu_ecc_errors_total GPU ECC error counts
+# TYPE amd_gpu_ecc_errors_total gauge
+amd_gpu_ecc_errors_total{gpu="0",type="correctable"} 0
+amd_gpu_ecc_errors_total{gpu="0",type="uncorrectable"} 0
+# HELP amd_gpu_fan GPU fan metrics
+# TYPE amd_gpu_fan gauge
+amd_gpu_fan{gpu="0",type="rpm"} 981
+amd_gpu_fan{gpu="0",type="speed"} 51
+amd_gpu_fan{gpu="0",type="usage"} 20
+# HELP amd_gpu_memory_bytes GPU memory usage in bytes
+# TYPE amd_gpu_memory_bytes gauge
+amd_gpu_memory_bytes{gpu="0",type="free_gtt"} 134738870272
+amd_gpu_memory_bytes{gpu="0",type="free_visible_vram"} 46458208256
+amd_gpu_memory_bytes{gpu="0",type="free_vram"} 46458208256
+amd_gpu_memory_bytes{gpu="0",type="total_gtt"} 135053443072
+amd_gpu_memory_bytes{gpu="0",type="total_visible_vram"} 48301604864
+amd_gpu_memory_bytes{gpu="0",type="total_vram"} 48301604864
+amd_gpu_memory_bytes{gpu="0",type="used_gtt"} 314572800
+amd_gpu_memory_bytes{gpu="0",type="used_visible_vram"} 1843396608
+amd_gpu_memory_bytes{gpu="0",type="used_vram"} 1843396608
+# HELP amd_gpu_power_watts GPU power consumption in watts
+# TYPE amd_gpu_power_watts gauge
+amd_gpu_power_watts{gpu="0",type="socket"} 34
+# HELP amd_gpu_temperature_celsius GPU temperature in celsius
+# TYPE amd_gpu_temperature_celsius gauge
+amd_gpu_temperature_celsius{gpu="0",type="edge"} 43
+amd_gpu_temperature_celsius{gpu="0",type="hotspot"} 49
+amd_gpu_temperature_celsius{gpu="0",type="memory"} 56
 # HELP amd_gpu_usage_percent GPU usage metrics in percent
 # TYPE amd_gpu_usage_percent gauge
 amd_gpu_usage_percent{gpu="0",type="gfx"} 0
-amd_gpu_usage_percent{gpu="0",type="umc"} 2
-amd_gpu_usage_percent{gpu="0",type="mm"} 98
-# HELP amd_gpu_power_watts GPU power consumption in watts
-# TYPE amd_gpu_power_watts gauge
-amd_gpu_power_watts{gpu="0",type="socket"} 41
-# HELP amd_gpu_temperature_celsius GPU temperature in celsius
-# TYPE amd_gpu_temperature_celsius gauge
-amd_gpu_temperature_celsius{gpu="0",type="edge"} 42
-amd_gpu_temperature_celsius{gpu="0",type="hotspot"} 49
-# HELP amd_gpu_clock_mhz GPU clock metrics in MHz
-# TYPE amd_gpu_clock_mhz gauge
-amd_gpu_clock_mhz{gpu="0",type="gfx"} 252
-# HELP amd_gpu_memory_bytes GPU memory usage in bytes
-# TYPE amd_gpu_memory_bytes gauge
-amd_gpu_memory_bytes{gpu="0",type="total"} 4.8301604864e+10
-amd_gpu_memory_bytes{gpu="0",type="used"} 1.843396608e+09
+amd_gpu_usage_percent{gpu="0",type="mm"} 0
+amd_gpu_usage_percent{gpu="0",type="umc"} 0
+amd_gpu_usage_percent{gpu="0",type="vcn"} 19
 # HELP amd_gpu_voltage_mv GPU voltage in millivolts
 # TYPE amd_gpu_voltage_mv gauge
-amd_gpu_voltage_mv{gpu="0",type="gfx"} 719
+amd_gpu_voltage_mv{gpu="0",type="gfx"} 729
+amd_gpu_voltage_mv{gpu="0",type="memory"} 674
+amd_gpu_voltage_mv{gpu="0",type="soc"} 704
 `)); err != nil {
 		t.Errorf("unexpected collecting result: %s", err)
 	}

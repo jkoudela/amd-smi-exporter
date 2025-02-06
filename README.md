@@ -26,24 +26,29 @@ To use the dashboard:
 
 ## Installation
 
+Clone the repository and build the binary:
+
 ```bash
-go get github.com/jankoudela/amd-smi-exporter
+git clone https://github.com/jkoudela/amd-smi-exporter.git
+cd amd-smi-exporter
+make build
+```
+
+Alternatively, you can use the provided install script to deploy to a remote Linux host with IP and username using ssh:
+
+```bash
+./install.sh <target-host> root
 ```
 
 ## Building
 
-The project includes a Makefile with several build targets:
-
-### Build for local architecture (macOS)
-```bash
-make build
-```
+The project includes a Makefile with the following targets:
 
 ### Build for Linux (amd64)
 ```bash
-make build-linux
+make build
 ```
-This will create a binary named `amd-smi-exporter-linux-amd64` that you can deploy to your Linux machine.
+This will create a Linux binary named `amd-smi-exporter` that you can deploy to your Linux machine.
 
 ### Clean build artifacts
 ```bash
@@ -66,13 +71,33 @@ make clean
 The exporter provides the following metrics:
 
 - `amd_gpu_usage_percent`: GPU usage metrics in percent
+  - Graphics engine usage (gfx)
+  - Memory controller usage (umc)
+  - Multimedia engine usage (mm)
+  - Video codec engine usage (vcn)
 - `amd_gpu_power_watts`: GPU power consumption in watts
+  - Socket power consumption
 - `amd_gpu_temperature_celsius`: GPU temperature in celsius
+  - Edge temperature
+  - Hotspot temperature
+  - Memory temperature
 - `amd_gpu_clock_mhz`: GPU clock speeds in MHz
+  - Graphics engine clock (gfx)
 - `amd_gpu_memory_bytes`: GPU memory usage in bytes
-- `amd_gpu_fan`: GPU fan metrics (speed and RPM)
+  - Reports VRAM (total, free, used)
+  - Reports visible VRAM (total, free, used)
+  - Reports GTT memory (total, free, used)
+- `amd_gpu_fan`: GPU fan metrics
+  - Speed percentage
+  - RPM
+  - Usage percentage
 - `amd_gpu_voltage_mv`: GPU voltage in millivolts
+  - Graphics engine voltage (gfx)
+  - Memory voltage
+  - SOC voltage
 - `amd_gpu_ecc_errors_total`: GPU ECC error counts
+  - Correctable errors
+  - Uncorrectable errors
 
 Each metric includes appropriate labels to identify the GPU and metric type.
 

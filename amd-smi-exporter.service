@@ -1,6 +1,6 @@
 [Unit]
 Description=AMD SMI Exporter
-Documentation=https://github.com/jankoudela/amd-smi-exporter
+Documentation=https://github.com/jkoudela/amd-smi-exporter
 After=network-online.target
 
 [Service]

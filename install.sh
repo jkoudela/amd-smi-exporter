@@ -1,4 +1,5 @@
 #!/bin/bash
+# Installs the binary and service file to a remote host Linux host
 
 # Check if target host is provided
 if [ $# -lt 1 ]; then
