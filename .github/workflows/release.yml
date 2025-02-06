@@ -28,7 +28,21 @@ jobs:
       - name: Generate Release Notes
         run: |
           echo "## What's Changed" > release_notes.md
-          git log $(git describe --tags --abbrev=0 2>/dev/null || echo HEAD^)..HEAD --pretty=format:"* %s" >> release_notes.md
+          # For first release, get all commits
+          if ! git describe --tags --abbrev=0 2>/dev/null; then
+            echo "### 🎉 First Release" >> release_notes.md
+            echo "\nInitial features:" >> release_notes.md
+            git log --pretty=format:"* %s" >> release_notes.md
+          else
+            # For subsequent releases
+            PREV_TAG=$(git describe --tags --abbrev=0)
+            echo "\nChanges since $PREV_TAG:" >> release_notes.md
+            git log "$PREV_TAG"..HEAD --pretty=format:"* %s" >> release_notes.md
+          fi
+          
+          # Add installation instructions
+          echo "\n\n## Installation" >> release_notes.md
+          echo '```bash\ncurl -sSL https://raw.githubusercontent.com/jkoudela/amd-smi-exporter/main/get.sh | sudo bash\n```' >> release_notes.md
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
