@@ -1,4 +1,4 @@
-.PHONY: build clean update-dashboard update-metrics
+.PHONY: build clean update-dashboard update-metrics tidy test
 
 # Binary name
 BINARY_NAME=amd-smi-exporter
@@ -17,3 +17,11 @@ update-dashboard:
 
 update-metrics:
 	./scripts/update-metrics.sh
+
+# Add dependencies
+tidy:
+	go mod tidy
+
+# Run tests
+test:
+	go test ./...
